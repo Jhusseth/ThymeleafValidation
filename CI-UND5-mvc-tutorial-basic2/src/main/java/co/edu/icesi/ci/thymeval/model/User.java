@@ -47,7 +47,6 @@ public class User {
 	@NotNull(message="the type cannot be empty",groups=ValidationGroup2.class)
 	private UserType type;
 	
-	
 	@NotNull(message="the gender cannot be empty",groups=ValidationGroup2.class)
 	private UserGender gender;
 	

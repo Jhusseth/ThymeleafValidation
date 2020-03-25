@@ -30,56 +30,59 @@ public class UserController {
 		;
 	}
 
-	@GetMapping("/users/")
+	@GetMapping("/users")
 	public String indexUser(Model model) {
 		model.addAttribute("users", userService.findAll());
 		return "users/index";
 	}
 	
-	@GetMapping("/users/add1")
+	@GetMapping("/users/add")
 	public String addUser(Model model) {
 		model.addAttribute("user", new User());
 		return "users/add-user-1";
 	}
+	
+	@PostMapping("/users/add")
+	public String saveUser(@Validated (ValidationGroup1.class) User user, BindingResult result, @RequestParam(value = "action", required = true) String action) {
+	 if (!action.equals("Cancel")) {
+		 if(result.hasErrors()) {
+			 return "redirect: /users/add";
+		 } 
+		 userService.save(user);
+	 }
+		 return "redirect:/users/add/"+ user.getId();	
+	}
+	
 
-	@GetMapping("/users/add2/{id}")
+	@GetMapping("/users/add/{id}")
 	public String addUser2(@PathVariable("id") long id,Model model) {
 		Optional<User> user = userService.findById(id);
-		if (user == null)
+		if (user == null) {
 			throw new IllegalArgumentException("Invalid user Id:" + id);
+		}
 		model.addAttribute("user", user.get());
 		model.addAttribute("genders", userService.getGenders());
 		model.addAttribute("types", userService.getTypes());
 		return "users/add-user-2";
 	}
-
-	@PostMapping("/users/add1")
-	public String saveUser(@Validated (ValidationGroup1.class) User user, BindingResult result, @RequestParam(value = "action", required = true) String action) {
-	 if (!action.equals("Cancel")) {
-		 if(result.hasErrors()) {
-			 return "redirect:/users/add2";
-		 } 
-		 userService.save(user);
-	 }
-		 return "redirect:/users/add2/{id}";	
-	}
 	
-	@PostMapping("/users/add2/{id}")
-	public String saveUser2(@Validated (ValidationGroup2.class) User user, BindingResult result,@PathVariable("id")long id, @RequestParam(value = "action", required = true) String action) {
+	@PostMapping("/users/add/{id}")
+	public String saveUser2(@Validated (ValidationGroup2.class) User user,@PathVariable("id") long id, BindingResult result,@RequestParam(value = "action", required = true) String action) {
 	 if (!action.equals("Cancel")) {
 		 if(result.hasErrors()) {
-			 return "redirect:/users/add1";
+			 return "redirect:/users/add/{id}";
 		 } 
 		 userService.save(user);
 	 }
-		 return "redirect:/users/";	
+		 return "redirect:/users";	
 	}
 
 	@GetMapping("/users/edit/{id}")
 	public String showUpdateForm(@PathVariable("id") long id, Model model) {
 		Optional<User> user = userService.findById(id);
-		if (user == null)
+		if (user == null) {
 			throw new IllegalArgumentException("Invalid user Id:" + id);
+		}
 		model.addAttribute("user", user.get());
 		model.addAttribute("genders", userService.getGenders());
 		model.addAttribute("types", userService.getTypes());
@@ -96,13 +99,13 @@ public class UserController {
 			}
 			userService.save(user);
 		}
-		return "redirect:/users/";
+		return "redirect:/users";
 	}
 
 	@GetMapping("/users/del/{id}")
 	public String deleteUser(@PathVariable("id") long id) {
 		User user = userService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
 		userService.delete(user);
-		return "redirect:/users/";
+		return "redirect:/users";
 	}
 }

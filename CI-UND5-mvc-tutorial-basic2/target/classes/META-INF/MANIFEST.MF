@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: thymeleafValidation2
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: fsociety
+Implementation-Vendor-Id: co.edu.icesi.ci.thymeleaf
+Build-Jdk: 1.8.0_242
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/thymeleafValidation
+Created-By: Maven Integration for Eclipse
+
