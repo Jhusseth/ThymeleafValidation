@@ -46,7 +46,7 @@ public class UserController {
 	public String saveUser(@Validated (ValidationGroup1.class) User user, BindingResult result, @RequestParam(value = "action", required = true) String action) {
 	 if (!action.equals("Cancel")) {
 		 if(result.hasErrors()) {
-			 return "redirect: /users/add";
+			 return "users/add-user-1";
 		 } 
 		 userService.save(user);
 	 }
@@ -67,7 +67,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/users/add/{id}")
-	public String saveUser2(@Validated (ValidationGroup2.class) User user,@PathVariable("id") long id, BindingResult result,@RequestParam(value = "action", required = true) String action) {
+	public String saveUser2(@PathVariable("id") long id,@Validated (ValidationGroup2.class) User user, BindingResult result,@RequestParam(value = "action", required = true) String action) {
 	 if (!action.equals("Cancel")) {
 		 if(result.hasErrors()) {
 			 return "redirect:/users/add/{id}";

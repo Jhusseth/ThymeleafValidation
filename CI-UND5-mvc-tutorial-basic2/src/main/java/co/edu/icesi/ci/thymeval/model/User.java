@@ -23,11 +23,11 @@ public class User {
 	@GeneratedValue(strategy= GenerationType.AUTO)
 	private long id;
 	
-	@Size(min=3,groups=ValidationGroup1.class)
+	@Size(min=3,groups=ValidationGroup1.class,message = "the character size must be greater than 3")
 	@NotEmpty(message="the User name cannot be empty",groups=ValidationGroup1.class)
 	private String userName;
 	
-	@Size(min=8,groups=ValidationGroup1.class)
+	@Size(min=8,groups=ValidationGroup1.class,message = "the character size must be greater than 8")
 	@NotEmpty(message="the date cannot be empty",groups=ValidationGroup1.class)
 	private String password;
 	
@@ -36,7 +36,7 @@ public class User {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthDate;
 	
-	@Size(min=2,groups=ValidationGroup2.class)
+	@Size(min=2,groups=ValidationGroup2.class,message = "the character size must be greater than 2")
 	@NotEmpty(message="the date cannot be empty",groups=ValidationGroup2.class)
 	private String name;
 	
