@@ -2,8 +2,6 @@ package co.edu.icesi.ci.thymeval.controller;
 
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,19 +54,6 @@ public class UserController {
 		 return "users/add-user-2";	
 	}
 	
-
-//	@GetMapping("/users/add/{id}")
-//	public String addUser2(@PathVariable("id") long id,Model model) {
-//		Optional<User> user = userService.findById(id);
-//		if (user == null) {
-//			throw new IllegalArgumentException("Invalid user Id:" + id);
-//		}
-//		model.addAttribute("user", user.get());
-//		model.addAttribute("genders", userService.getGenders());
-//		model.addAttribute("types", userService.getTypes());
-//		return "users/add-user-2";
-//	}
-	
 	@PostMapping("/users/add2")
 	public String saveUser2(@Validated (ValidationGroup2.class) User user, BindingResult result,@RequestParam(value = "action", required = true) String action) {
 	 if (!action.equals("Cancel")) {
@@ -93,12 +78,14 @@ public class UserController {
 	}
 
 	@PostMapping("/users/edit/{id}")
-	public String updateUser(@Valid User user,  BindingResult result,@PathVariable("id") long id,
-			@RequestParam(value = "action", required = true) String action) {
+	public String updateUser(@Validated ({(ValidationGroup1.class),(ValidationGroup2.class)}) User user,  BindingResult result,@PathVariable("id") long id,
+			@RequestParam(value = "action", required = true) String action,Model model) {
 		if (action != null && !action.equals("Cancel")) {
 			
 			if(result.hasErrors()) {
-				return "redirect:/users/edit/{id}";
+				model.addAttribute("genders", userService.getGenders());
+				model.addAttribute("types", userService.getTypes());
+				return "/users/update-user";
 			}
 			userService.save(user);
 		}
