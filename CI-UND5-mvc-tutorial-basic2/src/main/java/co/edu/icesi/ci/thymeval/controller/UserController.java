@@ -43,34 +43,37 @@ public class UserController {
 	}
 	
 	@PostMapping("/users/add")
-	public String saveUser(@Validated (ValidationGroup1.class) User user, BindingResult result, @RequestParam(value = "action", required = true) String action) {
+	public String saveUser(Model model,@Validated (ValidationGroup1.class) User user, BindingResult result, @RequestParam(value = "action", required = true) String action) {
 	 if (!action.equals("Cancel")) {
 		 if(result.hasErrors()) {
 			 return "users/add-user-1";
 		 } 
 		 userService.save(user);
+		 model.addAttribute("user",user);
+		 model.addAttribute("genders", userService.getGenders());
+		 model.addAttribute("types", userService.getTypes());	 
 	 }
-		 return "redirect:/users/add/"+ user.getId();	
+		 return "users/add-user-2";	
 	}
 	
 
-	@GetMapping("/users/add/{id}")
-	public String addUser2(@PathVariable("id") long id,Model model) {
-		Optional<User> user = userService.findById(id);
-		if (user == null) {
-			throw new IllegalArgumentException("Invalid user Id:" + id);
-		}
-		model.addAttribute("user", user.get());
-		model.addAttribute("genders", userService.getGenders());
-		model.addAttribute("types", userService.getTypes());
-		return "users/add-user-2";
-	}
+//	@GetMapping("/users/add/{id}")
+//	public String addUser2(@PathVariable("id") long id,Model model) {
+//		Optional<User> user = userService.findById(id);
+//		if (user == null) {
+//			throw new IllegalArgumentException("Invalid user Id:" + id);
+//		}
+//		model.addAttribute("user", user.get());
+//		model.addAttribute("genders", userService.getGenders());
+//		model.addAttribute("types", userService.getTypes());
+//		return "users/add-user-2";
+//	}
 	
-	@PostMapping("/users/add/{id}")
-	public String saveUser2(@PathVariable("id") long id,@Validated (ValidationGroup2.class) User user, BindingResult result,@RequestParam(value = "action", required = true) String action) {
+	@PostMapping("/users/add2")
+	public String saveUser2(@Validated (ValidationGroup2.class) User user, BindingResult result,@RequestParam(value = "action", required = true) String action) {
 	 if (!action.equals("Cancel")) {
 		 if(result.hasErrors()) {
-			 return "redirect:/users/add/{id}";
+			 return "redirect:/users/add";
 		 } 
 		 userService.save(user);
 	 }
